@@ -2,11 +2,15 @@ import {
   BeforeInsert,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import * as bcrypt from "bcrypt";
+import { Box } from "src/modules/boxes/entities/box.entity";
 
-@Entity()
+@Entity({
+  name: "users",
+})
 export class User {
   @PrimaryGeneratedColumn("uuid")
   id: string;
@@ -22,8 +26,10 @@ export class User {
   @Column("text")
   username: string;
 
-  // hash password before inserting into database
+  @OneToMany(() => User, (user) => user.boxes)
+  boxes: Box[];
 
+  // hash password before inserting into database
   @BeforeInsert()
   async hashPassword() {
     this.password = await bcrypt.hash(this.password, 10);
