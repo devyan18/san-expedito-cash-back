@@ -7,7 +7,9 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 
-@Entity({})
+@Entity({
+  name: "profits",
+})
 export class Profit {
   @PrimaryGeneratedColumn("uuid")
   public readonly id_profit: string;

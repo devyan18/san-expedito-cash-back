@@ -6,6 +6,8 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 
+import { removeTildes } from "src/utils/text.utils";
+
 @Entity({
   name: "items",
 })
@@ -19,16 +21,22 @@ export class Item {
   @Column("text")
   public readonly description_item: string;
 
-  @Column("text")
+  @Column("text", {
+    nullable: true,
+  })
   public slug_item?: string;
 
   @BeforeInsert()
   public async generateSlug() {
-    this.slug_item = this.name_item.toLowerCase().replace(/ /g, "-");
+    this.slug_item = removeTildes(
+      this.name_item.toLowerCase().replace(/ /g, "-"),
+    );
   }
 
   @BeforeUpdate()
   public async updateSlug() {
-    this.slug_item = this.name_item.toLowerCase().replace(/ /g, "-");
+    this.slug_item = removeTildes(
+      this.name_item.toLowerCase().replace(/ /g, "-"),
+    );
   }
 }
